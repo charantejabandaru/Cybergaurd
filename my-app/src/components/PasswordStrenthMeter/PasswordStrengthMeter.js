@@ -1,5 +1,6 @@
 // PasswordStrengthChecker.js
 import './PasswordStrengthMeter.css';
+import '../../Screenshot (28).png';
 import React, { useState } from 'react';
 const PasswordStrengthMeter = () => {
   const [password, setPassword] = useState('');
@@ -7,6 +8,10 @@ const PasswordStrengthMeter = () => {
   const [message, setMessage]= useState('');
 
   const checkPasswordStrength = () => {
+    if(password.length==0){
+      setStrength('');
+      setMessage('');
+    }
     if(password.length<3){
       setPassword("");
       setMessage("Enter minimum of 3 characters");
@@ -16,6 +21,7 @@ const PasswordStrengthMeter = () => {
     const hasLowerCase=/[a-z]/.test(password);
     const hasUpperCase=/[A-Z]/.test(password);
     const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+    
     if (password.length >= 8 && hasNumber && hasLowerCase && hasUpperCase && hasSpecialChar) {
        setStrength('SECURE');
        setMessage('Your password is secure');
@@ -24,23 +30,39 @@ const PasswordStrengthMeter = () => {
        setMessage('Your password is strong, but there is room for improvement.');
     } else if ((password.length >=6&&hasNumber&&(hasLowerCase||hasUpperCase))||(password.length<=6&&hasSpecialChar)) {
         setStrength('AVERAGE');
-        setMessage('Your password is not strong better to improvYour password is not strong enough. it is advisable to improve it.e');
+        setMessage('Your password is not strong enough. it is advisable to improve it');
     } else {
         setStrength('WEAK');
         setMessage('Note: Your password is weak add combination of numbers and special characters to strengthen your password');
     }
   };
 
+  const togglePasswordVisibility=()=>{
+    var passwordInput = document.getElementById("password");
+      var showPasswordSpan = document.getElementById("showPassword");
+
+      if (passwordInput.type == "password") {
+        passwordInput.type = "text";
+        showPasswordSpan.textContent = "Hide Password";
+      } else {
+        passwordInput.type = "password";
+        showPasswordSpan.textContent = "Show Password";
+      }
+  };
+
   return (
-    <div>
+    <div className='Background'>
+      <div className='Main'>
       <h1>CYBERGAURD</h1>
       <h2>Password Strength Checker</h2>
       <input
         type="password"
+        id="password"
         placeholder="Enter your password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
+      <span id="showPassword" onClick={togglePasswordVisibility}>Show Password</span><br></br>
       <button onClick={checkPasswordStrength}>Check Strength</button>
       <p>Password Strength: {strength}<br></br>{message}</p>
       <div>
@@ -53,6 +75,7 @@ const PasswordStrengthMeter = () => {
         </ul>
       </div>
 
+    </div>
     </div>
   );
 };
